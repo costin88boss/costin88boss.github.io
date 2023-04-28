@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Costin88boss</title>
   <link rel="stylesheet" href="styles.css">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
 </head>
 <body>
   <header class="header">
@@ -13,8 +15,8 @@
       <nav class="header__nav">
         <ul>
           <li><a href="#about">About</a></li>
-          <!--<li><a href="#repos">Repos</a></li>-->
           <!--<li><a href="#games">Games</a></li>-->
+          <!-- TODO: a game section where I put some games I worked/am working on -->
           <li><a href="https://github.com/costin88boss" target="_blank">GitHub</a></li>
         </ul>
       </nav>
@@ -33,155 +35,6 @@
         <p>You can check my Itch.io page <a class="link" href="https://costin88boss.itch.io/">here</a>.</p>
         </div>
     </section>
-    <!--
-    <section id="games" class="section">
-        <div class="section__content">
-            <h2 class="section__title">Released Games</h2>
-            <div class="section__projects">
-                <!-
-                    <h3 class="section__repo-link">
-                        Example Game
-                        <span class="section__repo-link-divider"></span>
-                        <a href="https://example.com/" target="_blank" class="section__repo-link">View page</a>
-                    </h3>
-                ->
-                <h3 class="section__repo-link">
-                    TODO
-                    <span class="section__repo-link-divider"></span>
-                    <a href="https://example.com/" target="_blank" class="section__repo-link">View page</a>
-                </h3>
-            </div>
-        </div>
-      </section>
-    -->
-      <!--
-    <section id="repos" class="section">
-      <div class="section__content">
-        <h2 class="section__title">My GitHub Repositories</h2>
-        <div class="sort-by-container">
-          <label for="sort-by">Sort by:</label>
-          <select id="sort-by">
-            <option value="commits">Most commits</option>
-            <option value="updated">Last update</option>
-            <option value="name">Name</option>
-            <option value="size">Biggest size</option>
-          </select>
-        </div>
-        <div id="repos-container" class="section__repos"></div>
-      </div>
-    </section>
-    -->
   </main>
-  <!--
-  <script>
-    const username = 'costin88boss';
-    const reposContainer = document.querySelector('#repos-container');
-    const sortBy = document.querySelector('#sort-by');
-  
-    fetch(`https://api.github.com/users/${username}/repos`)
-      .then(response => response.json())
-      .then(repos => {
-        // Filter out the repository used for the page (username.github.io)
-        const filteredRepos = repos.filter(repo => repo.name !== `${username}.github.io`);
-
-        // Function to sort the repositories based on the selected option
-        const sortRepos = () => {
-          const sortValue = sortBy.value;
-          if (sortValue === 'name') {
-            filteredRepos.sort((a, b) => a.name.localeCompare(b.name));
-            const repoNames = filteredRepos.map(repo => `
-                    <div class="section__repo">
-                        <h3 class="section__repo-link">
-                            ${repo.name.replace(/-/g, ' ')}
-                            <span class="section__repo-link-divider"></span>
-                            <a href="${repo.html_url}" target="_blank" class="section__repo-link">View page</a>
-                        </h3>
-                    <p>${repo.description || 'No description available'}</p>
-                    </div>
-                `).join('');
-            // Insert the sorted list into the container
-            reposContainer.innerHTML = repoNames;
-          } else if (sortValue === 'updated') {
-            filteredRepos.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
-
-            const repoNames = filteredRepos.map(repo => `
-                <div class="section__repo">
-                    <h3 class="section__repo-link">
-                        ${repo.name.replace(/-/g, ' ')}
-                        <span class="section__repo-link-divider"></span>
-                        <a href="${repo.html_url}" target="_blank" class="section__repo-link">View page</a>
-                    </h3>
-                    <h4>${new Date(repo.updated_at).toDateString() || "0"}</h4>
-                    <p>${repo.description || 'No description available'}</p>
-                </div>
-                `).join('');
-
-            // Insert the list into the container
-            reposContainer.innerHTML = repoNames;
-          } else if (sortValue === 'size') {
-            filteredRepos.sort((a, b) => b.size - a.size);
-
-            const repoNames = filteredRepos.map(repo => `
-                <div class="section__repo">
-                    <h3 class="section__repo-link">
-                        ${repo.name.replace(/-/g, ' ')}
-                        <span class="section__repo-link-divider"></span>
-                        <a href="${repo.html_url}" target="_blank" class="section__repo-link">View page</a>
-                    </h3>
-                    <h4>${repo.size || "0"}KB</h4>
-                    <p>${repo.description || 'No description available'}</p>
-                </div>
-                `).join('');
-
-            // Insert the list into the container
-            reposContainer.innerHTML = repoNames;
-          } else if (sortValue === 'commits') {
-            // Make an additional API call for each repository to get the number of commits
-            const promises = filteredRepos.map(repo => 
-            fetch(`${repo.url}/commits`)
-                .then(response => response.json())
-                .then(commits => ({
-                ...repo,
-                commitCount: commits.length
-                }))
-            );
-            
-            Promise.all(promises)
-            .then(reposWithCommitCount => {
-                const sortedRepos = reposWithCommitCount.sort((a, b) => { 
-                    if(a.commitCount == undefined) {
-                        a.commitCount = 0;
-                    }
-                    num = b.commitCount - a.commitCount
-                    return num;
-                });
-
-                // Create a list of repository names with a "View page" link and commit count for each repository
-                const repoNames = sortedRepos.map(repo => `
-                <div class="section__repo">
-                    <h3 class="section__repo-link">
-                        ${repo.name.replace(/-/g, ' ')}
-                        <span class="section__repo-link-divider"></span>
-                        <a href="${repo.html_url}" target="_blank" class="section__repo-link">View page</a>
-                    </h3>
-                    <h4>${repo.commitCount || "No"} commits</h4>
-                    <p>${repo.description || 'No description available'}</p>
-                </div>
-                `).join('');
-
-                // Insert the list into the container
-                reposContainer.innerHTML = repoNames;
-            })
-            .catch(error => console.error(error));
-          }
-        }
-        // Initial sort by name
-        sortRepos();
-        // Add event listener to the "select" element to trigger sorting when a new option is selected
-        sortBy.addEventListener('change', sortRepos);
-      })
-      .catch(error => console.error(error));
-  </script>
--->
 </body>
 </html>
